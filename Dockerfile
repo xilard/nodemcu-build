@@ -6,13 +6,13 @@ RUN mkdir /opt/nodemcu-firmware
 WORKDIR /opt/nodemcu-firmware
 
 CMD BUILD_DATE="$(date +%Y%m%d-%H%M)" && \
-    IMAGE_NAME=nodemcu_firmware_${BUILD_DATE}; && \
+    IMAGE_NAME=nodemcu_firmware_${BUILD_DATE} && \
 	if [ ! -d ../esp-open-sdk ]; then \
 		if [ -f tools/esp-open-sdk.tar.xz ]; then \
 			tar -Jxvf esp-open-sdk.tar.xz -C ../; \
 		else \
 			tar -zxvf esp-open-sdk.tar.gz -C ../; \
-		fi && \
+		fi \
 	fi && \
     export PATH=$PATH:$PWD/../esp-open-sdk/sdk:$PWD/../esp-open-sdk/xtensa-lx106-elf/bin  && \
     if [ -z "$FLOAT" ]; then \
@@ -23,4 +23,4 @@ CMD BUILD_DATE="$(date +%Y%m%d-%H%M)" && \
 	cd bin  && \
 	srec_cat -output "${IMAGE_NAME}".bin -binary 0x00000.bin -binary -fill 0xff 0x00000 0x2000 0x02000.bin -binary -offset 0x2000 && \
 	cp ../app/mapfile "${IMAGE_NAME}".map && \
-	cd ../); \
+	cd ..
