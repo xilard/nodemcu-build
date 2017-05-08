@@ -18,13 +18,13 @@ CMD \
 	export PATH=$PATH:$PWD/../esp-open-sdk/sdk:$PWD/../esp-open-sdk/xtensa-lx106-elf/bin && \
 	if [ -z "$BL_BIN"]; then \
 		BL_BIN=0x00000.bin; \
-	end && \
+	fi && \
 	if [ -z "$FW_OFFSET"]; then \
 		FW_OFFSET=0x10000; \
-	end && \
+	fi && \
 	if [ -z "$FW_BIN"]; then \
 		FW_BIN=0x10000.bin; \
-	end && \
+	fi && \
 	if [ -z "$FLOAT" ]; then \
 		make EXTRA_CCFLAGS="-DLUA_NUMBER_INTEGRAL" clean all; \
 	else \
