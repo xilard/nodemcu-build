@@ -8,10 +8,10 @@ WORKDIR /opt/nodemcu-firmware
 CMD BUILD_DATE="$(date +%Y%m%d-%H%M)" && \
     IMAGE_NAME=nodemcu_firmware_${BUILD_DATE} && \
 	if [ ! -d ../esp-open-sdk ]; then \
-		if [ -f tools/esp-open-sdk.tar.xz ]; then \
-			tar -Jxvf esp-open-sdk.tar.xz -C ../; \
+		if [ -f ./tools/esp-open-sdk.tar.xz ]; then \
+			tar -Jxvf ./tools/esp-open-sdk.tar.xz -C ../; \
 		else \
-			tar -zxvf esp-open-sdk.tar.gz -C ../; \
+			tar -zxvf ./tools/esp-open-sdk.tar.gz -C ../; \
 		fi \
 	fi && \
     export PATH=$PATH:$PWD/../esp-open-sdk/sdk:$PWD/../esp-open-sdk/xtensa-lx106-elf/bin  && \
