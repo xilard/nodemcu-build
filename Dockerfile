@@ -1,7 +1,8 @@
 FROM ubuntu
 MAINTAINER xilard
 
-RUN apt-get update && apt-get install -y wget unzip git make python-serial srecord bc xz-utils gcc libncurses5-dev
+RUN apt-get update && apt-get install -y wget unzip git make python-serial srecord bc xz-utils gcc libncurses5-dev aptitude bison gperf
+RUN aptitude install flex
 RUN mkdir /opt/nodemcu-firmware
 WORKDIR /opt/nodemcu-firmware
 
@@ -36,6 +37,5 @@ CMD \
 		cp ../app/mapfile "${IMAGE_NAME}".map && \
 		cd ..); \
 	else \
-		(export PATH=$PATH:$PWD/tools/toolchains/esp32/bin && \
-		make clean all); \
+		make clean all; \
 	fi
