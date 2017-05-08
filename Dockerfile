@@ -5,30 +5,22 @@ RUN apt-get update && apt-get install -y wget unzip git make python-serial sreco
 RUN mkdir /opt/nodemcu-firmware
 WORKDIR /opt/nodemcu-firmware
 
-CMD if [ -z "$IMAGE_NAME" ]; then \
-      BRANCH="$(git rev-parse --abbrev-ref HEAD | sed -r 's/[\/\\]+/_/g')" && \
-      BUILD_DATE="$(date +%Y%m%d-%H%M)" && \
-      IMAGE_NAME=${BRANCH}_${BUILD_DATE}; \
-    else true; fi && \
-    cp tools/esp-open-sdk.tar.* ../ && \
-    cd ..  && \
-    if [ -f ./esp-open-sdk.tar.xz ]; then \
-        tar -Jxvf esp-open-sdk.tar.xz; \
-    else \
-        tar -zxvf esp-open-sdk.tar.gz; \
-    fi && \
-    export PATH=$PATH:$PWD/esp-open-sdk/sdk:$PWD/esp-open-sdk/xtensa-lx106-elf/bin  && \
-    cd nodemcu-firmware  && \
-    if [ -z "$INTEGER_ONLY" ]; then \
-      (make clean all && \
-      cd bin  && \
-      srec_cat -output nodemcu_float_"${IMAGE_NAME}".bin -binary 0x00000.bin -binary -fill 0xff 0x00000 0x10000 0x10000.bin -binary -offset 0x10000 && \
-      cp ../app/mapfile nodemcu_float_"${IMAGE_NAME}".map && \
-      cd ../); \
-    else true; fi && \
-    if [ -z "$FLOAT_ONLY" ]; then \
-      (make EXTRA_CCFLAGS="-DLUA_NUMBER_INTEGRAL" clean all && \
-      cd bin && \
-      srec_cat -output nodemcu_integer_"${IMAGE_NAME}".bin -binary 0x00000.bin -binary -fill 0xff 0x00000 0x10000 0x10000.bin -binary -offset 0x10000 && \
-      cp ../app/mapfile nodemcu_integer_"${IMAGE_NAME}".map); \
-    else true; fi
+CMD BUILD_DATE="$(date +%Y%m%d-%H%M)" && \
+    IMAGE_NAME=nodemcu_firmware_${BUILD_DATE}; && \
+	if [ ! -d ../esp-open-sdk ]; then \
+		if [ -f tools/esp-open-sdk.tar.xz ]; then \
+			tar -Jxvf esp-open-sdk.tar.xz -C ../; \
+		else \
+			tar -zxvf esp-open-sdk.tar.gz -C ../; \
+		fi && \
+	fi && \
+    export PATH=$PATH:$PWD/../esp-open-sdk/sdk:$PWD/../esp-open-sdk/xtensa-lx106-elf/bin  && \
+    if [ -z "$FLOAT" ]; then \
+		make EXTRA_CCFLAGS="-DLUA_NUMBER_INTEGRAL" clean all; \
+	else \
+		make clean all; \
+	fi && \
+	cd bin  && \
+	srec_cat -output "${IMAGE_NAME}".bin -binary 0x00000.bin -binary -fill 0xff 0x00000 0x2000 0x02000.bin -binary -offset 0x2000 && \
+	cp ../app/mapfile "${IMAGE_NAME}".map && \
+	cd ../); \
