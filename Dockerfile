@@ -36,6 +36,5 @@ CMD \
 		cp ../app/mapfile "${IMAGE_NAME}".map && \
 		cd ..); \
 	else \
-		(export PATH=$PATH:$PWD/tools/toolchains/esp32/bin && \
-		make clean all); \
+		make clean all; \
 	fi
