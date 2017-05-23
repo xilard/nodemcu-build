@@ -36,8 +36,8 @@ CMD \
 		cp ../app/mapfile "${IMAGE_NAME}".map && \
 		cd ..); \
 	else \
-		make clean all; \
-		mkdir -p bin \
+		make clean all; && \
+		mkdir -p bin && \
 		srec_cat -output bin/"${IMAGE_NAME}".bin -binary build/bootloader/bootloader.bin -binary -offset 0x01000 -fill 0xff 0x00000 0x08000 build/partitions_singleapp.bin -binary -offset 0x08000 -fill 0xff 0x08000 0x10000 build/NodeMCU.bin -binary -offset 0x10000 && \
 		cp build/NodeMCU.map bin/"${IMAGE_NAME}".map); \
 	fi
