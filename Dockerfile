@@ -6,7 +6,7 @@ RUN mkdir /opt/nodemcu-firmware
 WORKDIR /opt/nodemcu-firmware
 
 CMD \
-	(BUILD_DATE="$(date +%Y%m%d-%H%M%S)" && \
+	BUILD_DATE="$(date +%Y%m%d-%H%M%S)" && \
 	IMAGE_NAME=nodemcu_firmware_${BUILD_DATE} && \
 	if [ -z "$ESP32"]; then \
 		if [ ! -d ../esp-open-sdk ]; then \
