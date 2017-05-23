@@ -9,7 +9,7 @@ CMD \
 	BUILD_DATE="$(date +%Y%m%d-%H%M%S)" && \
 	IMAGE_NAME=nodemcu_firmware_${BUILD_DATE} && \
 	if [ -z "$ESP32"]; then \
-		if [ ! -d ../esp-open-sdk ]; then \
+		(if [ ! -d ../esp-open-sdk ]; then \
 			if [ -f ./tools/esp-open-sdk.tar.xz ]; then \
 				tar -Jxvf ./tools/esp-open-sdk.tar.xz -C ../; \
 			else \
@@ -31,7 +31,7 @@ CMD \
 		else \
 			make clean all; \
 		fi && \
-		cd bin  && \
+		cd bin && \
 		srec_cat -output "${IMAGE_NAME}".bin -binary "$BL_BIN" -binary -fill 0xff 0x00000 "${FW_OFFSET}" "${FW_BIN}" -binary -offset "${FW_OFFSET}" && \
 		cp ../app/mapfile "${IMAGE_NAME}".map && \
 		cd ..); \
