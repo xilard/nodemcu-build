@@ -6,9 +6,9 @@ RUN mkdir /opt/nodemcu-firmware
 WORKDIR /opt/nodemcu-firmware
 
 CMD \
+	(BUILD_DATE="$(date +%Y%m%d-%H%M%S)" && \
+	IMAGE_NAME=nodemcu_firmware_${BUILD_DATE} && \
 	if [ -z "$ESP32"]; then \
-		(BUILD_DATE="$(date +%Y%m%d-%H%M%S)" && \
-		IMAGE_NAME=nodemcu_firmware_${BUILD_DATE} && \
 		if [ ! -d ../esp-open-sdk ]; then \
 			if [ -f ./tools/esp-open-sdk.tar.xz ]; then \
 				tar -Jxvf ./tools/esp-open-sdk.tar.xz -C ../; \
@@ -37,4 +37,7 @@ CMD \
 		cd ..); \
 	else \
 		make clean all; \
+		mkdir -p bin \
+		srec_cat -output bin/"${IMAGE_NAME}".bin -binary build/bootloader/bootloader.bin -binary -offset 0x01000 -fill 0xff 0x00000 0x08000 build/partitions_singleapp.bin -binary -offset 0x08000 -fill 0xff 0x08000 0x10000 build/NodeMCU.bin -binary -offset 0x10000 && \
+		cp build/NodeMCU.map bin/"${IMAGE_NAME}".map && \
 	fi
