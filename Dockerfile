@@ -26,17 +26,23 @@ CMD \
 		if [ -z "$FW_BIN"]; then \
 			FW_BIN=0x10000.bin; \
 		fi && \
+		if [ ! -z "$REBUILD"]; then \
+			make clean; \
+		fi && \
 		if [ -z "$FLOAT" ]; then \
-			make EXTRA_CCFLAGS="-DLUA_NUMBER_INTEGRAL" clean all; \
+			make EXTRA_CCFLAGS="-DLUA_NUMBER_INTEGRAL" all; \
 		else \
-			make clean all; \
+			make all; \
 		fi && \
 		cd bin && \
 		srec_cat -output "${IMAGE_NAME}".bin -binary "$BL_BIN" -binary -fill 0xff 0x00000 "${FW_OFFSET}" "${FW_BIN}" -binary -offset "${FW_OFFSET}" && \
 		cp ../app/mapfile "${IMAGE_NAME}".map && \
 		cd ..); \
 	else \
-		(make clean all && \
+		(if [ ! -z "$REBUILD"]; then \
+			make clean; \
+		fi && \
+		make all && \
 		mkdir -p bin && \
 		srec_cat -output bin/"${IMAGE_NAME}".bin -binary build/bootloader/bootloader.bin -binary -offset 0x01000 -fill 0xff 0x00000 0x08000 build/partitions_singleapp.bin -binary -offset 0x08000 -fill 0xff 0x08000 0x10000 build/NodeMCU.bin -binary -offset 0x10000 && \
 		cp -f bin/"${IMAGE_NAME}".bin bin/nodemcu_firmware_latest.bin && \
