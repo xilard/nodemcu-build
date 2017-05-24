@@ -39,12 +39,15 @@ CMD \
 		cp ../app/mapfile "${IMAGE_NAME}".map && \
 		cd ..); \
 	else \
-		(if [ ! -z "$REBUILD"]; then \
+		(if [ -z "$PARTITION_BIN"]; then \
+			FW_BIN=build/partitions_singleapp.bin; \
+		fi && \
+		if [ ! -z "$REBUILD"]; then \
 			make clean; \
 		fi && \
 		make all && \
 		mkdir -p bin && \
-		srec_cat -output bin/"${IMAGE_NAME}".bin -binary build/bootloader/bootloader.bin -binary -offset 0x01000 -fill 0xff 0x00000 0x08000 build/partitions_singleapp.bin -binary -offset 0x08000 -fill 0xff 0x08000 0x10000 build/NodeMCU.bin -binary -offset 0x10000 && \
+		srec_cat -output bin/"${IMAGE_NAME}".bin -binary build/bootloader/bootloader.bin -binary -offset 0x01000 -fill 0xff 0x00000 0x08000 "${PARTITION_BIN}" -binary -offset 0x08000 -fill 0xff 0x08000 0x10000 build/NodeMCU.bin -binary -offset 0x10000 && \
 		cp -f bin/"${IMAGE_NAME}".bin bin/nodemcu_firmware_latest.bin && \
 		cp build/NodeMCU.map bin/"${IMAGE_NAME}".map); \
 	fi
