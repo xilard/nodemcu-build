@@ -53,7 +53,7 @@ CMD \
 			FW_OFFSET=0x10000; \
 		fi && \
 		if [ ! -z "$PHY_INIT_OFFSET"]; then \
-			PHY_INIT_DATA="-binary build/phy_init_data.bin -binary -offset $(PHY_INIT_OFFSET)"; \
+			PHY_INIT_DATA="build/phy_init_data.bin -binary -offset $(PHY_INIT_OFFSET)"; \
 		fi && \
 		if [ ! -z "$REBUILD"]; then \
 			make clean; \
