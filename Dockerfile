@@ -8,7 +8,7 @@ WORKDIR /opt/nodemcu-firmware
 CMD \
 	BUILD_DATE="$(date +%Y%m%d-%H%M%S)" && \
 	IMAGE_NAME=nodemcu_firmware_${BUILD_DATE} && \
-	if [ -z "$ESP32"]; then \
+	if [ -z "$ESP32" ]; then \
 		(if [ ! -d ../esp-open-sdk ]; then \
 			if [ -f ./tools/esp-open-sdk.tar.xz ]; then \
 				tar -Jxvf ./tools/esp-open-sdk.tar.xz -C ../; \
@@ -17,16 +17,16 @@ CMD \
 			fi \
 		fi && \
 		export PATH=$PATH:$PWD/../esp-open-sdk/sdk:$PWD/../esp-open-sdk/xtensa-lx106-elf/bin && \
-		if [ -z "$BL_BIN"]; then \
+		if [ -z "$BL_BIN" ]; then \
 			BL_BIN=0x00000.bin; \
 		fi && \
-		if [ -z "$FW_OFFSET"]; then \
+		if [ -z "$FW_OFFSET" ]; then \
 			FW_OFFSET=0x10000; \
 		fi && \
-		if [ -z "$FW_BIN"]; then \
+		if [ -z "$FW_BIN" ]; then \
 			FW_BIN=0x10000.bin; \
 		fi && \
-		if [ ! -z "$REBUILD"]; then \
+		if [ ! -z "$REBUILD" ]; then \
 			make clean; \
 		fi && \
 		if [ -z "$FLOAT" ]; then \
@@ -39,24 +39,24 @@ CMD \
 		cp ../app/mapfile "${IMAGE_NAME}".map && \
 		cd ..); \
 	else \
-		(if [ -z "$PARTITIONS_OFFSET"]; then \
+		(if [ -z "$PARTITIONS_OFFSET" ]; then \
 			PARTITIONS_OFFSET=0x8000; \
 		fi && \
-		if [ -z "$PARTITIONS_BIN"]; then \
+		if [ -z "$PARTITIONS_BIN" ]; then \
 			PARTITIONS_BIN=build/partitions_singleapp.bin; \
 		fi && \
-		if [ -z "$FW_BIN"]; then \
+		if [ -z "$FW_BIN" ]; then \
 			FW_BIN=build/NodeMCU.bin.bin; \
 		fi && \
-		if [ -z "$FW_OFFSET"]; then \
+		if [ -z "$FW_OFFSET" ]; then \
 			FW_OFFSET=0x10000; \
 		fi && \
-		if [ ! -z "$REBUILD"]; then \
+		if [ ! -z "$REBUILD" ]; then \
 			make clean; \
 		fi && \
 		make all && \
 		mkdir -p bin && \
-		if [ -z "$PHY_INIT_OFFSET"]; then \
+		if [ -z "$PHY_INIT_OFFSET" ]; then \
 			srec_cat -output bin/"${IMAGE_NAME}".bin -binary build/bootloader/bootloader.bin -binary -offset 0x01000 -fill 0xff 0x00000 "${PARTITIONS_OFFSET}" "${PARTITIONS_BIN}" -binary -offset "${PARTITIONS_OFFSET}" -fill 0xff "${PARTITIONS_OFFSET}" "${FW_OFFSET}" build/NodeMCU.bin -binary -offset "${FW_OFFSET}"; \
 		else \
 			srec_cat -output bin/"${IMAGE_NAME}".bin -binary build/bootloader/bootloader.bin -binary -offset 0x01000 -fill 0xff 0x00000 "${PARTITIONS_OFFSET}" "${PARTITIONS_BIN}" -binary -offset "${PARTITIONS_OFFSET}" -fill 0xff "${PARTITIONS_OFFSET}" "${PHY_INIT_OFFSET}" build/phy_init_data.bin -binary -offset ${PHY_INIT_OFFSET} -fill 0xff "${PHY_INIT_OFFSET}" "${FW_OFFSET}" build/NodeMCU.bin -binary -offset "${FW_OFFSET}"; \
