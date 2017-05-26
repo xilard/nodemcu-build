@@ -44,7 +44,10 @@ CMD \
 			PARTITIONS_OFFSET=0x8000; \
 		fi && \
 		if [ -z "$PARTITIONS_BIN"]; then \
-			FW_BIN=build/partitions_singleapp.bin; \
+			PARTITIONS_BIN=build/partitions_singleapp.bin; \
+		fi && \
+		if [ -z "$FW_BIN"]; then \
+			FW_BIN=build/NodeMCU.bin.bin; \
 		fi && \
 		if [ -z "$FW_OFFSET"]; then \
 			FW_OFFSET=0x10000; \
