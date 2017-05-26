@@ -39,15 +39,21 @@ CMD \
 		cp ../app/mapfile "${IMAGE_NAME}".map && \
 		cd ..); \
 	else \
-		(if [ -z "$PARTITION_BIN"]; then \
+		(if [ -z "$PARTITIONS_OFFSET"]; then \
+			PARTITIONS_OFFSET=0x8000; \
+		fi && \
+		if [ -z "$PARTITIONS_BIN"]; then \
 			FW_BIN=build/partitions_singleapp.bin; \
+		fi && \
+		if [ -z "$FW_OFFSET"]; then \
+			FW_OFFSET=0x10000; \
 		fi && \
 		if [ ! -z "$REBUILD"]; then \
 			make clean; \
 		fi && \
 		make all && \
 		mkdir -p bin && \
-		srec_cat -output bin/"${IMAGE_NAME}".bin -binary build/bootloader/bootloader.bin -binary -offset 0x01000 -fill 0xff 0x00000 0x08000 "${PARTITION_BIN}" -binary -offset 0x08000 -fill 0xff 0x08000 0x10000 build/NodeMCU.bin -binary -offset 0x10000 && \
+		srec_cat -output bin/"${IMAGE_NAME}".bin -binary build/bootloader/bootloader.bin -binary -offset 0x01000 -fill 0xff 0x00000 "${PARTITIONS_OFFSET}" "${PARTITIONS_BIN}" -binary -offset "${PARTITIONS_OFFSET}" -fill 0xff "${PARTITIONS_OFFSET}" "${FW_OFFSET}" build/NodeMCU.bin -binary -offset "${FW_OFFSET}" && \
 		cp -f bin/"${IMAGE_NAME}".bin bin/nodemcu_firmware_latest.bin && \
 		cp build/NodeMCU.map bin/"${IMAGE_NAME}".map); \
 	fi
