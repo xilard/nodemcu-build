@@ -36,6 +36,7 @@ CMD \
 		fi && \
 		cd bin && \
 		srec_cat -output "${IMAGE_NAME}".bin -binary "$BL_BIN" -binary -fill 0xff 0x00000 "${FW_OFFSET}" "${FW_BIN}" -binary -offset "${FW_OFFSET}" && \
+		cp -f "${IMAGE_NAME}".bin nodemcu_firmware_latest.bin && \
 		cp ../app/mapfile "${IMAGE_NAME}".map && \
 		cd ..); \
 	else \
