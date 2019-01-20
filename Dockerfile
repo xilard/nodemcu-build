@@ -1,7 +1,7 @@
 FROM ubuntu
 MAINTAINER xilard
 
-RUN apt-get update && apt-get install -y wget unzip git make python-serial srecord bc xz-utils gcc libncurses5-dev aptitude bison gperf && aptitude -y install flex
+RUN apt-get update && apt-get install -y --fix-missing wget unzip git make python-serial srecord bc xz-utils gcc libncurses5-dev aptitude bison gperf python-pip && aptitude -y install flex && pip install --upgrade pip
 RUN mkdir /opt/nodemcu-firmware
 WORKDIR /opt/nodemcu-firmware
 
