@@ -5,15 +5,10 @@ RUN apt-get update && \
 	apt-get upgrade -y && \
 	apt-get install -y --fix-missing wget unzip git make python-serial srecord bc xz-utils gcc libncurses5-dev aptitude bison gperf python-pip && \
 	aptitude -y install flex && \
-	pip install --user --upgrade pip pyserial future cryptography pyparsing && \
-	\
-	apt-get install -y --fix-missing autoconf texinfo help2man gawk libtool-bin && \
-	cd /tmp && \
-	git clone -b xtensa-1.22.x https://github.com/espressif/crosstool-NG.git && \
-	cd crosstool-NG && \
-	./bootstrap && ./configure --enable-local && make install
-
+	pip install --user --upgrade pip pyserial future cryptography pyparsing
+	
 RUN mkdir /opt/nodemcu-firmware
+
 WORKDIR /opt/nodemcu-firmware
 
 CMD \
