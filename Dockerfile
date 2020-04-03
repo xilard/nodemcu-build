@@ -5,7 +5,7 @@ RUN apt-get update && \
 	apt-get upgrade -y && \
 	apt-get install -y --fix-missing wget unzip git make python-serial srecord bc xz-utils gcc libncurses5-dev aptitude bison gperf python-pip && \
 	aptitude -y install flex && \
-	pip install --user --upgrade pip pyserial future cryptography pyparsing
+	pip install --user --upgrade pip pyserial future cryptography pyparsing>=2.0.3,<2.4.0 click pyelftools
 	
 RUN mkdir /opt/nodemcu-firmware
 
