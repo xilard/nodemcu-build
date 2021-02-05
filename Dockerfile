@@ -4,7 +4,9 @@ MAINTAINER xilard
 RUN apt-get update && \
 	apt-get upgrade -y && \
 	apt-get install -y --fix-missing wget unzip git make python-serial srecord bc xz-utils gcc libncurses5-dev aptitude bison gperf python-pip && \
-	aptitude -y install flex
+	aptitude -y install flex && \
+	pip install --upgrade pip && \
+	pip install pyserial future cryptography "pyparsing>=2.0.3,<2.4.0" click pyelftools "python-socketio<5" "gdbgui==0.13.2.0" "pygdbmi<=0.9.0.2" "reedsolo>=1.5.3,<=1.5.4" bitstring ecdsa setuptools
 	
 RUN mkdir /opt/nodemcu-firmware
 
