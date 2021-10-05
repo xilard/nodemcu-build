@@ -54,7 +54,7 @@ CMD \
 			PARTITIONS_BIN=build/partitions_singleapp.bin; \
 		fi && \
 		if [ -z "$FW_BIN" ]; then \
-			FW_BIN=build/NodeMCU.bin; \
+			FW_BIN=build/NodeMCU.bin.bin; \
 		fi && \
 		if [ -z "$FW_OFFSET" ]; then \
 			FW_OFFSET=0x10000; \
@@ -62,15 +62,12 @@ CMD \
 		if [ ! -z "$REBUILD" ]; then \
 			make clean; \
 		fi && \
-		if [ ! -z "$PHY_INIT_BIN" ]; then \
-			PHY_INIT_BIN=build/phy_init_data.bin; \
-		fi && \
 		make all && \
 		mkdir -p bin && \
 		if [ -z "$PHY_INIT_OFFSET" ]; then \
-			srec_cat -output bin/"${IMAGE_NAME}".bin -binary build/bootloader/bootloader.bin -binary -offset 0x01000 -fill 0xff 0x00000 "${PARTITIONS_OFFSET}" "${PARTITIONS_BIN}" -binary -offset "${PARTITIONS_OFFSET}" -fill 0xff "${PARTITIONS_OFFSET}" "${FW_OFFSET}" "${FW_BIN}" -binary -offset "${FW_OFFSET}"; \
+			srec_cat -output bin/"${IMAGE_NAME}".bin -binary build/bootloader/bootloader.bin -binary -offset 0x01000 -fill 0xff 0x00000 "${PARTITIONS_OFFSET}" "${PARTITIONS_BIN}" -binary -offset "${PARTITIONS_OFFSET}" -fill 0xff "${PARTITIONS_OFFSET}" "${FW_OFFSET}" build/NodeMCU.bin -binary -offset "${FW_OFFSET}"; \
 		else \
-			srec_cat -output bin/"${IMAGE_NAME}".bin -binary build/bootloader/bootloader.bin -binary -offset 0x01000 -fill 0xff 0x00000 "${PARTITIONS_OFFSET}" "${PARTITIONS_BIN}" -binary -offset "${PARTITIONS_OFFSET}" -fill 0xff "${PARTITIONS_OFFSET}" "${PHY_INIT_OFFSET}" "${PHY_INIT_BIN}" -binary -offset ${PHY_INIT_OFFSET} -fill 0xff "${PHY_INIT_OFFSET}" "${FW_OFFSET}" "${FW_BIN}" -binary -offset "${FW_OFFSET}"; \
+			srec_cat -output bin/"${IMAGE_NAME}".bin -binary build/bootloader/bootloader.bin -binary -offset 0x01000 -fill 0xff 0x00000 "${PARTITIONS_OFFSET}" "${PARTITIONS_BIN}" -binary -offset "${PARTITIONS_OFFSET}" -fill 0xff "${PARTITIONS_OFFSET}" "${PHY_INIT_OFFSET}" build/phy_init_data.bin -binary -offset ${PHY_INIT_OFFSET} -fill 0xff "${PHY_INIT_OFFSET}" "${FW_OFFSET}" build/NodeMCU.bin -binary -offset "${FW_OFFSET}"; \
 		fi && \
 		cp -f bin/"${IMAGE_NAME}".bin bin/nodemcu_firmware_latest.bin && \
 		cp build/NodeMCU.map bin/"${IMAGE_NAME}".map); \
