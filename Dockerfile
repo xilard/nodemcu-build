@@ -62,7 +62,9 @@ CMD \
 		if [ ! -z "$REBUILD" ]; then \
 			make clean; \
 		fi && \
-		if [ ! -z "$PHY_INIT_BIN" ]; then \
+		if [ ! -z "$PHY_INIT_MULTIPLE" ]; then \
+			PHY_INIT_BIN=sdk/esp32-esp-idf/components/esp_wifi/phy_multiple_init_data.bin; \
+		else \
 			PHY_INIT_BIN=build/phy_init_data.bin; \
 		fi && \
 		make all && \
